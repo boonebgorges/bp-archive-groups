@@ -130,12 +130,21 @@ class BP_Archive_Groups extends BP_Component {
 				if ( update_user_meta( $user_id, 'bp_archived_groups', $user_archived_groups ) ) {
 					$return = 1;
 				} else {
-					$return = -1;
+					$return = -3;
 				}
 			}
 
 		} else {
 			// Groups that are archived sitewide are archived in groupmeta
+			if ( 'archived' == groups_get_groupmeta( $group_id, 'bpag_status' ) ) {
+				$return = -2;
+			} else {
+				if ( groups_update_groupmeta( $group_id, 'bpag_status', 'archived' ) ) {
+					$return = 1;
+				} else {
+					$return = -3;
+				}
+			}
 		}
 
 		return $return;
